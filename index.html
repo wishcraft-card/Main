@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WishCraft — Digital Wish, Crafted for Life</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plum: {
+                            900: '#150e1c',
+                            800: '#1c1325',
+                            700: '#261b32',
+                            600: '#322340',
+                        },
+                        cream: {
+                            50: '#faf8f5',
+                            100: '#f6f2e9',
+                            200: '#eee8da',
+                            300: '#e1d7c4',
+                        },
+                        terracotta: {
+                            400: '#e09886',
+                            500: '#d48b7b',
+                            600: '#b86f60',
+                        },
+                        gold: '#d4af37'
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        script: ['Alex Brush', 'Dancing Script', 'cursive']
+                    },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f6f2e9;
+            color: #231a29;
+            overflow-x: hidden;
+        }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-script { font-family: 'Alex Brush', cursive; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #150e1c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d48b7b;
+            border-radius: 4px;
+        }
+
+        /* Glassmorphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .glass-dark {
+            background: rgba(38, 27, 50, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Glow effects */
+        .flame-glow {
+            box-shadow: 0 0 20px 8px rgba(255, 180, 80, 0.6);
+        }
+
+        /* Custom scratch canvas overlay */
+        #scratch-canvas {
+            cursor: pointer;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="selection:bg-terracotta-500 selection:text-white">
+
+    <!-- NAVIGATION HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 px-6 lg:px-16 py-5 flex items-center justify-between transition-all duration-300 bg-gradient-to-b from-plum-900/90 to-transparent backdrop-blur-sm border-b border-white/5">
+        <a href="#" class="font-serif text-2xl lg:text-3xl font-normal tracking-tight text-white flex items-center gap-1">
+            WishCraft<span class="text-terracotta-500 font-bold">.</span>
+        </a>
+        
+        <nav class="hidden md:flex items-center gap-8 text-xs lg:text-sm tracking-wide font-medium text-white/80">
+            <a href="#hero" class="text-white hover:text-terracotta-400 transition">Home</a>
+            <a href="#agency" class="hover:text-white transition">Agency</a>
+            <a href="#features" class="hover:text-white transition">Features</a>
+            <a href="#works" class="hover:text-white transition">Our Works</a>
+            <a href="#assistant" class="hover:text-white transition">AI Assistant</a>
+            <a href="#contact" class="hover:text-white transition">Contact</a>
+        </nav>
+
+        <div>
+            <a href="#contact" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-md border border-white/30 text-white text-xs tracking-wider uppercase font-medium hover:bg-white hover:text-plum-900 transition-all duration-300 group">
+                Get started 
+                <span class="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- SECTION 1: HERO -->
+    <section id="hero" class="relative min-h-screen flex flex-col justify-between bg-plum-900 text-white overflow-hidden pt-28 pb-10">
+        <!-- Background Image Container with fallback -->
+        <div class="absolute inset-0 z-0">
+            <img src="cake.png" alt="WishCraft Ambient Background" class="w-full h-full object-cover object-center opacity-65 mix-blend-luminosity" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=2000&auto=format&fit=crop';">
+            <div class="absolute inset-0 bg-gradient-to-t from-plum-900 via-plum-900/40 to-plum-900/80"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-plum-900/90 via-transparent to-plum-900/70"></div>
+        </div>
+
+        <!-- Ambient Glow FX -->
+        <div class="absolute right-1/4 top-1/3 w-96 h-96 bg-terracotta-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full my-auto py-12 flex flex-col justify-center">
+            <div class="max-w-3xl">
+                <!-- Subtitle Tag -->
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-8 h-[1px] bg-terracotta-400"></span>
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-terracotta-400 font-semibold">YOUR MOMENT, MADE TIMELESS</span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="font-serif text-6xl sm:text-7xl lg:text-9xl font-normal leading-none tracking-tight mb-4">
+                    Digital <span class="italic text-terracotta-400 font-serif">Wish</span>
+                </h1>
+
+                <!-- Subheading -->
+                <p class="font-serif italic text-2xl sm:text-3xl text-white/90 font-light mb-12">
+                    Crafted for Life.
+                </p>
+
+                <!-- CTA Link -->
+                <a href="#agency" class="inline-flex items-center gap-3 group text-xs uppercase tracking-[0.2em] font-medium text-white/90 hover:text-white transition">
+                    <span class="border-b border-white/40 pb-1 group-hover:border-white transition">DISCOVER THE FEELING</span>
+                    <span class="text-sm text-terracotta-400 group-hover:translate-y-1 transition-transform">↘</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Hero Bottom Bar Indicators -->
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full flex items-center justify-between text-[11px] text-white/60 tracking-wider">
+            <div class="flex items-center gap-2">
+                <span class="text-terracotta-400 font-serif">01</span>
+                <span>/</span>
+                <span>06</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="w-6 h-[1px] bg-white/30"></span>
+                <span class="italic font-serif">A keepsake, not just a card.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: ANIMATED CARD AGENCY -->
+    <section id="agency" class="py-24 lg:py-32 px-6 lg:px-16 bg-cream-100 text-plum-900 relative">
+        <div class="max-w-7xl mx-auto">
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Left Column: Agency Info -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-[1px] bg-terracotta-500"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-terracotta-600 font-semibold">A NEW WAY TO SAY IT</span>
+                    </div>
+
+                    <h2 class="font-serif text-5xl lg:text-6xl font-normal leading-[1.1] text-plum-900">
+                        Animated <br/>
+                        Card <br/>
+                        <span class="italic text-terracotta-500">Agency.</span>
+                    </h2>
+
+                    <p class="text-sm lg:text-base text-plum-900/70 font-light leading-relaxed max-w-md pt-2">
+                        Paper cards can get lost in the mail. A WishCraft keepsake arrives at 12:00 AM anywhere in the world, opening into an interactive memory made to last.
+                    </p>
+
+                    <div class="pt-4">
+                        <a href="#works" class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.15em] font-semibold text-plum-900 border-b border-plum-900/40 pb-1 hover:border-plum-900 hover:text-terracotta-600 transition">
+                            See what a card can do 
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Card Preview & Floating Badges -->
+                <div class="lg:col-span-7 relative flex justify-center items-center py-12 lg:py-0">
+                    
+                    <!-- Decorative Background Circles -->
+                    <div class="absolute w-[450px] h-[450px] rounded-full border border-plum-900/10 pointer-events-none"></div>
+                    <div class="absolute w-[300px] h-[300px] rounded-full border border-plum-900/5 pointer-events-none"></div>
+
+                    <!-- Floating Badge Top Left (240+) -->
+                    <div class="absolute top-0 left-4 sm:left-12 z-20 bg-white p-4 rounded-xl shadow-lg border border-cream-200 text-left w-36 animate-float" style="animation-delay: 0s;">
+                        <span class="text-xs text-terracotta-500">✦</span>
+                        <div class="font-serif text-2xl font-bold text-plum-900 mt-1">240+</div>
+                        <p class="text-[9px] uppercase tracking-wider text-plum-900/60 font-medium">CUSTOM WISHES CREATED</p>
+                    </div>
+
+                    <!-- Floating Badge Top Right (99.8%) -->
+                    <div class="absolute top-4 right-4 sm:right-12 z-20 bg-white p-4 rounded-xl shadow-lg border border-cream-200 text-left w-40 animate-float" style="animation-delay: 1.5s;">
+                        <span class="text-xs text-terracotta-500">✦</span>
+                        <div class="font-serif text-2xl font-bold text-plum-900 mt-1">99.8%</div>
+                        <p class="text-[9px] uppercase tracking-wider text-plum-900/60 font-medium">ON-TIME MIDNIGHT DELIVERY</p>
+                    </div>
+
+                    <!-- Floating Badge Bottom Right (0 km) -->
+                    <div class="absolute bottom-4 right-6 sm:right-16 z-20 bg-white p-4 rounded-xl shadow-lg border border-cream-200 text-left w-40 animate-float" style="animation-delay: 2.5s;">
+                        <span class="text-xs text-terracotta-500">✦</span>
+                        <div class="font-serif text-2xl font-bold text-plum-900 mt-1">0 km</div>
+                        <p class="text-[9px] uppercase tracking-wider text-plum-900/60 font-medium">DISTANCE DELAY GUARANTEE</p>
+                    </div>
+
+                    <!-- Central Phone / Digital Card Container -->
+                    <div class="relative z-10 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl border border-cream-300 p-6 text-center transform hover:scale-[1.02] transition duration-500">
+                        <div class="text-[10px] text-plum-900/50 uppercase tracking-widest flex items-center justify-between mb-4">
+                            <span>wishcraft.app/wish-902</span>
+                            <span class="text-terracotta-500">live preview</span>
+                        </div>
+
+                        <div class="py-6 border-y border-cream-200/80 my-2">
+                            <span class="font-script text-2xl text-terracotta-500 block mb-1">a little wish, made just for you</span>
+                            <h3 class="font-serif text-3xl font-medium text-plum-900 mb-2">Happy Birthday, Sarah! 🎂</h3>
+                            <p class="text-xs text-plum-900/60 font-light italic mb-6">May this new chapter be your brightest one yet.</p>
+
+                            <!-- Interactive Flame Demo -->
+                            <div class="relative w-36 h-28 mx-auto bg-gradient-to-b from-cream-100 to-pink-50/40 rounded-xl border border-cream-200 flex flex-col items-center justify-end pb-3">
+                                <div id="demo-flame" class="w-3 h-5 bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-200 rounded-full mb-1 animate-pulse flame-glow"></div>
+                                <div class="w-2 h-6 bg-amber-100 border border-amber-300 rounded-t mb-1"></div>
+                                <div class="w-24 h-8 bg-pink-100 border border-pink-200 rounded-md shadow-inner flex items-center justify-center">
+                                    <span class="text-[9px] text-terracotta-600 font-script text-xs">make a wish</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-2">
+                            <p class="text-[10px] text-plum-900/50 italic mb-2">Make a wish, then tap the flame.</p>
+                            <button onclick="toggleDemoFlame()" class="px-4 py-1.5 rounded-full border border-terracotta-400/40 text-[10px] uppercase tracking-wider text-terracotta-600 hover:bg-terracotta-500 hover:text-white transition">
+                                Try a real blow
+                            </button>
+                        </div>
+
+                        <div class="mt-4 text-[9px] text-plum-900/40 font-mono">
+                            made with care, for Sarah
+                        </div>
+                    </div>
+
+                    <!-- Right Sub-box Text overlay (100% Interactive) -->
+                    <div class="hidden xl:block absolute right-0 top-1/2 transform translate-x-12 -translate-y-1/2 z-20 max-w-xs text-left">
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-terracotta-600 font-semibold block mb-1">MORE THAN A MESSAGE</span>
+                        <h4 class="font-serif text-3xl font-normal text-plum-900 italic mb-2">100% interactive.</h4>
+                        <p class="text-xs text-plum-900/70 leading-relaxed mb-4">
+                            Sound effects, scratch-to-reveal surprises, secret voice notes, and photo vaults. Every detail is yours.
+                        </p>
+                        <a href="#features" class="inline-flex items-center gap-2 px-5 py-2.5 bg-plum-900 text-white rounded-md text-xs tracking-wider uppercase hover:bg-plum-800 transition">
+                            Explore designs →
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Bottom helper line text on the LEFT SIDE -->
+            <div class="mt-16 pt-8 border-t border-plum-900/10 flex flex-col sm:flex-row items-start justify-start gap-4 text-xs text-plum-900/60 italic font-serif">
+                <div class="flex items-center gap-3 text-left">
+                    <span class="w-8 h-[1px] bg-plum-900/30 inline-block"></span>
+                    <span>Paper cards wait for the post. <strong class="not-italic text-plum-900 font-semibold">We arrive at 12:00 AM.</strong></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: MARQUEE TICKER BANNER -->
+    <div class="bg-plum-900 text-cream-100 py-4 overflow-hidden border-y border-white/10 select-none">
+        <div class="flex whitespace-nowrap animate-marquee">
+            <div class="flex items-center gap-8 text-xs lg:text-sm tracking-[0.2em] uppercase font-serif px-4">
+                <span>◆ Anniversaries</span>
+                <span>◆ Birthdays</span>
+                <span>◆ Weddings</span>
+                <span>◆ Mother's Day</span>
+                <span>◆ Graduations</span>
+                <span>◆ Christmas</span>
+                <span>◆ New Year</span>
+                <span>◆ Father's Day</span>
+                <span>◆ Anniversaries</span>
+                <span>◆ Birthdays</span>
+                <span>◆ Weddings</span>
+                <span>◆ Mother's Day</span>
+                <span>◆ Graduations</span>
+            </div>
+            <div class="flex items-center gap-8 text-xs lg:text-sm tracking-[0.2em] uppercase font-serif px-4" aria-hidden="true">
+                <span>◆ Anniversaries</span>
+                <span>◆ Birthdays</span>
+                <span>◆ Weddings</span>
+                <span>◆ Mother's Day</span>
+                <span>◆ Graduations</span>
+                <span>◆ Christmas</span>
+                <span>◆ New Year</span>
+                <span>◆ Father's Day</span>
+                <span>◆ Anniversaries</span>
+                <span>◆ Birthdays</span>
+                <span>◆ Weddings</span>
+                <span>◆ Mother's Day</span>
+                <span>◆ Graduations</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: LITTLE MOMENTS, BIG MAGIC GRID -->
+    <section id="features" class="py-24 lg:py-32 px-6 lg:px-16 bg-cream-100 text-plum-900">
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Section Title Header -->
+            <div class="text-center max-w-xl mx-auto mb-20">
+                <div class="flex items-center justify-center gap-3 mb-3">
+                    <span class="w-6 h-[1px] bg-terracotta-500"></span>
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-terracotta-600 font-semibold">SMALL DETAILS, BIG FEELINGS</span>
+                    <span class="w-6 h-[1px] bg-terracotta-500"></span>
+                </div>
+
+                <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-plum-900 mb-4">
+                    Little moments. <br/>
+                    <span class="italic text-terracotta-500">Big magic.</span>
+                </h2>
+
+                <p class="text-xs sm:text-sm text-plum-900/70 font-light leading-relaxed">
+                    Not just something to read. Something to open, explore, listen to, and remember.
+                </p>
+            </div>
+
+            <!-- 6 Feature Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Feature 1: Blow out candles -->
+                <div class="bg-white rounded-2xl p-8 border border-cream-200 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-terracotta-500 text-lg">🕯️</span>
+                            <span class="text-[10px] font-mono text-plum-900/40">01 / 06</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-plum-900 font-normal mb-3">Blow out candles</h3>
+                        <p class="text-xs text-plum-900/70 leading-relaxed font-light mb-8">
+                            A tiny flame that listens for a tap—or a real breath—and disappears in a burst of celebration.
+                        </p>
+                    </div>
+
+                    <!-- Candle Visual Container -->
+                    <div class="bg-cream-50 rounded-xl p-6 border border-cream-200/80 flex flex-col items-center justify-center min-h-[140px] relative">
+                        <div id="candle-flame-card" class="w-3.5 h-6 bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-200 rounded-full mb-1 animate-pulse flame-glow transition-all duration-500"></div>
+                        <div class="w-3 h-12 bg-gradient-to-b from-amber-100 to-amber-200 border border-amber-300 rounded-t"></div>
+                        <div class="w-20 h-4 bg-pink-100 border border-pink-200 rounded-full shadow-sm mt-0.5"></div>
+
+                        <button onclick="blowCandleCard()" class="mt-4 px-3 py-1 rounded-full text-[10px] bg-white border border-cream-300 text-plum-900/70 hover:bg-terracotta-500 hover:text-white transition">
+                            Tap to blow out 💨
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Scratch to reveal -->
+                <div class="bg-white rounded-2xl p-8 border border-cream-200 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-terracotta-500 text-lg">🎁</span>
+                            <span class="text-[10px] font-mono text-plum-900/40">02 / 06</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-plum-900 font-normal mb-3">Scratch to reveal</h3>
+                        <p class="text-xs text-plum-900/70 leading-relaxed font-light mb-8">
+                            Hide a promise, a surprise, or a little gift voucher beneath a layer made to be discovered.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Scratch Canvas Container -->
+                    <div class="relative bg-gradient-to-r from-purple-100 via-pink-100 to-amber-100 rounded-xl p-4 border border-cream-200 min-h-[140px] flex flex-col items-center justify-center text-center overflow-hidden">
+                        <!-- Secret Revealed Text Underneath -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center p-2 bg-rose-50">
+                            <span class="text-[10px] font-semibold text-terracotta-600 uppercase tracking-widest">Surprise Voucher Unlocked!</span>
+                            <span class="font-serif text-lg text-plum-900 font-bold">✨ Spa Weekend Trip ✨</span>
+                        </div>
+
+                        <!-- Canvas Scratch Mask Overlay -->
+                        <canvas id="scratch-canvas" class="absolute inset-0 w-full h-full z-10"></canvas>
+                        
+                        <div class="absolute bottom-2 right-2 z-20 pointer-events-none">
+                            <span class="text-[9px] bg-white/80 backdrop-blur px-2 py-0.5 rounded text-plum-900/70 font-medium">Drag to scratch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Photo memory vault -->
+                <div class="bg-white rounded-2xl p-8 border border-cream-200 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-terracotta-500 text-lg">🤍</span>
+                            <span class="text-[10px] font-mono text-plum-900/40">03 / 06</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-plum-900 font-normal mb-3">Photo memory vault</h3>
+                        <p class="text-xs text-plum-900/70 leading-relaxed font-light mb-8">
+                            Polaroid stacks, memory slideshows, and galleries that make every favorite moment feel close.
+                        </p>
+                    </div>
+
+                    <!-- Polaroid Stack Display -->
+                    <div class="bg-cream-50 rounded-xl p-4 border border-cream-200/80 min-h-[140px] flex items-center justify-center relative overflow-hidden">
+                        <div class="relative w-36 h-28">
+                            <!-- Card 1 -->
+                            <div class="absolute top-0 left-2 w-24 h-24 bg-white p-1.5 rounded shadow border border-cream-200 transform -rotate-6 transition group-hover:-rotate-12 duration-300">
+                                <div class="w-full h-16 bg-pink-100 rounded-sm mb-1 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="Memory photo">
+                                </div>
+                                <span class="text-[8px] font-script text-center block text-plum-900">our little moment</span>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="absolute top-2 right-2 w-24 h-24 bg-white p-1.5 rounded shadow-md border border-cream-200 transform rotate-6 transition group-hover:rotate-12 duration-300">
+                                <div class="w-full h-16 bg-amber-100 rounded-sm mb-1 overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="Memory photo 2">
+                                </div>
+                                <span class="text-[8px] font-script text-center block text-plum-900">memories to keep</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 4: Music & voice notes -->
+                <div class="bg-white rounded-2xl p-8 border border-cream-200 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-terracotta-500 text-lg">🎵</span>
+                            <span class="text-[10px] font-mono text-plum-900/40">04 / 06</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-plum-900 font-normal mb-3">Music & voice notes</h3>
+                        <p class="text-xs text-plum-900/70 leading-relaxed font-light mb-8">
+                            Set the scene with a custom background track, then add a voice message only they can hear.
+                        </p>
+                    </div>
+
+                    <!-- Voice Note Bar UI -->
+                    <div class="bg-purple-50/60 rounded-xl p-4 border border-purple-100 min-h-[140px] flex flex-col justify-center">
+                        <div class="flex items-center gap-3">
+                            <button id="play-voice-btn" onclick="toggleVoiceNote()" class="w-10 h-10 rounded-full bg-plum-900 text-white flex items-center justify-center text-xs hover:bg-terracotta-500 transition shadow">
+                                ▶
+                            </button>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between text-[10px] text-plum-900/70 mb-1">
+                                    <span class="font-script text-sm text-plum-900">just for you</span>
+                                    <span id="voice-timer" class="font-mono">00:08</span>
+                                </div>
+                                <!-- Waveform simulation -->
+                                <div class="flex items-center gap-0.5 h-5 bg-white/80 rounded px-2">
+                                    <span class="w-1 bg-terracotta-400 h-2 rounded-full animate-pulse"></span>
+                                    <span class="w-1 bg-terracotta-500 h-4 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-400 h-3 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-300 h-1 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-500 h-5 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-400 h-3 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-300 h-2 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-500 h-4 rounded-full"></span>
+                                    <span class="w-1 bg-terracotta-400 h-2 rounded-full"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 5: Celebration FX -->
+                <div class="bg-white rounded-2xl p-8 border border-cream-200 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-terracotta-500 text-lg">✨</span>
+                            <span class="text-[10px] font-mono text-plum-900/40">05 / 06</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-plum-900 font-normal mb-3">Celebration FX</h3>
+                        <p class="text-xs text-plum-900/70 leading-relaxed font-light mb-8">
+                            Confetti, floating hearts, rising balloons, and party-popper moments right on cue.
+                        </p>
+                    </div>
+
+                    <!-- Celebration Button Widget -->
+                    <div class="bg-cream-50 rounded-xl p-4 border border-cream-200/80 min-h-[140px] flex flex-col items-center justify-center relative overflow-hidden">
+                        <!-- Floating Balloons Illustration -->
+                        <div class="flex items-end gap-2 mb-3">
+                            <div class="w-4 h-6 bg-pink-300 rounded-full animate-bounce"></div>
+                            <div class="w-5 h-7 bg-purple-300 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                            <div class="w-4 h-6 bg-amber-300 rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
+                        </div>
+                        <button onclick="triggerConfettiFX()" class="px-4 py-1.5 bg-white border border-terracotta-400/50 rounded-full text-[10px] text-terracotta-600 font-semibold tracking-wider hover:bg-terracotta-500 hover:text-white transition shadow-sm flex items-center gap-1.5">
+                            Make it pop 🥳
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feature 6: Midnight delivery -->
+                <div class="bg-white rounded-2xl p-8 border border-cream-200 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-terracotta-500 text-lg">⏰</span>
+                            <span class="text-[10px] font-mono text-plum-900/40">06 / 06</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-plum-900 font-normal mb-3">Midnight delivery</h3>
+                        <p class="text-xs text-plum-900/70 leading-relaxed font-light mb-8">
+                            A private link arrives precisely at 12:00 AM—wherever in the world your person is.
+                        </p>
+                    </div>
+
+                    <!-- Midnight Clock Graphic Widget -->
+                    <div class="bg-plum-900 rounded-xl p-4 border border-plum-800 text-white min-h-[140px] flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#d48b7b_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                        <div class="relative z-10 text-center">
+                            <div class="w-16 h-16 rounded-full border border-white/20 mx-auto flex items-center justify-center mb-1">
+                                <span class="font-serif text-sm tracking-widest text-terracotta-400">12:00<br/><span class="text-[8px] tracking-normal text-white/60">AM</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-16 text-center text-xs text-plum-900/40 tracking-widest uppercase flex items-center justify-center gap-4">
+                <span class="w-12 h-[1px] bg-plum-900/10"></span>
+                <span>EVERY WISH IS MADE BY HAND, AND SENT WITH HEART</span>
+                <span class="w-12 h-[1px] bg-plum-900/10"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: OUR WORKS -->
+    <section id="works" class="py-24 lg:py-32 px-6 lg:px-16 bg-plum-900 text-white relative">
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Section Title -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-white/10">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="w-8 h-[1px] bg-terracotta-400"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-terracotta-400 font-semibold">A FEW LITTLE STORIES</span>
+                    </div>
+                    <h2 class="font-serif text-5xl lg:text-6xl font-normal leading-tight">
+                        Our <span class="italic text-terracotta-400 font-serif">works.</span>
+                    </h2>
+                </div>
+
+                <div class="mt-4 md:mt-0 text-left md:text-right max-w-xs">
+                    <p class="font-serif italic text-sm text-white/70">
+                        Two windows into what a wish can become.
+                    </p>
+                    <p class="text-[11px] text-white/40 mt-1">
+                        Each one starts with your story.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Works Grid Cards (Wedding Card Removed) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                
+                <!-- Card 1: Sarah's 21st Birthday -->
+                <div class="bg-cream-50 text-plum-900 rounded-2xl overflow-hidden border border-white/10 shadow-xl group hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="bg-gradient-to-b from-rose-900/40 via-purple-900/30 to-plum-900 p-8 h-64 relative flex flex-col items-center justify-center text-center text-white border-b border-white/10">
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-3">
+                                <span class="text-xs">🎂</span>
+                            </div>
+                            <span class="font-script text-2xl text-cream-100">make a wish</span>
+                            <span class="text-[9px] uppercase tracking-widest text-white/50 mt-4 border-t border-white/10 pt-2 w-full">A WISHCRAFT ORIGINAL</span>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-[9px] uppercase tracking-widest text-terracotta-600 font-semibold block mb-1">BIRTHDAY • 21</span>
+                            <h3 class="font-serif text-2xl text-plum-900 font-normal mb-2">Sarah's 21st Birthday</h3>
+                            <p class="text-xs text-plum-900/60 font-light mb-6">A little more magic for a milestone moment.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://dinu444.github.io/sarahbirthday/" target="_blank" class="flex items-center justify-between pt-4 border-t border-cream-200 text-plum-900 hover:text-terracotta-600 transition">
+                            <span class="text-[10px] uppercase tracking-wider font-semibold">Preview demo</span>
+                            <span class="text-xs text-terracotta-600 group-hover:translate-x-1 transition-transform">↗</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: To Mom, With Love -->
+                <div class="bg-cream-50 text-plum-900 rounded-2xl overflow-hidden border border-white/10 shadow-xl group hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="bg-gradient-to-b from-amber-900/40 via-rose-900/30 to-plum-900 p-8 h-64 relative flex flex-col items-center justify-center text-center text-white border-b border-white/10">
+                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-3">
+                                <span class="text-xs">🌸</span>
+                            </div>
+                            <span class="font-script text-2xl text-cream-100">for my first home</span>
+                            <span class="text-[9px] uppercase tracking-widest text-white/50 mt-4 border-t border-white/10 pt-2 w-full">A WISHCRAFT ORIGINAL</span>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-[9px] uppercase tracking-widest text-terracotta-600 font-semibold block mb-1">MOTHER'S DAY</span>
+                            <h3 class="font-serif text-2xl text-plum-900 font-normal mb-2">To Mom, With Love</h3>
+                            <p class="text-xs text-plum-900/60 font-light mb-6">A keepsake letter filled with little moments.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://dinu444.github.io/mothersday/" target="_blank" class="flex items-center justify-between pt-4 border-t border-cream-200 text-plum-900 hover:text-terracotta-600 transition">
+                            <span class="text-[10px] uppercase tracking-wider font-semibold">Preview demo</span>
+                            <span class="text-xs text-terracotta-600 group-hover:translate-x-1 transition-transform">↗</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Bar Link -->
+            <div class="mt-16 pt-8 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+                <span class="uppercase tracking-widest">YOUR STORY COULD BE NEXT</span>
+                <a href="#contact" class="text-white hover:text-terracotta-400 transition flex items-center gap-1 font-medium">
+                    Let's make it yours →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: COMPARISON SECTION -->
+    <section class="py-24 lg:py-32 px-6 lg:px-16 bg-cream-100 text-plum-900">
+        <div class="max-w-5xl mx-auto text-center">
+            
+            <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-plum-900 mb-3">
+                One birthday, <br/>
+                <span class="italic text-terracotta-500">two experiences.</span>
+            </h2>
+
+            <p class="text-xs sm:text-sm text-plum-900/70 font-light max-w-lg mx-auto mb-12">
+                Compare the Basic keepsake and Pro interactive story together, then choose the way you want to celebrate them.
+            </p>
+
+            <!-- Comparison Table Container -->
+            <div class="bg-white rounded-2xl border border-cream-200 shadow-xl overflow-hidden p-6 sm:p-10 text-left">
+                
+                <!-- Table Top Toggle Pill -->
+                <div class="flex flex-col sm:flex-row items-center justify-between border-b border-cream-200 pb-6 mb-8 gap-4">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-plum-900/60 font-medium">ONE CELEBRATION • TWO WAYS TO MAKE IT YOURS</span>
+
+                    <div class="flex items-center bg-cream-100 p-1 rounded-lg border border-cream-200 text-xs">
+                        <button onclick="switchTier('basic')" id="tab-basic" class="px-4 py-2 rounded-md font-medium text-plum-900 bg-white shadow-sm transition">
+                            Basic keepsake
+                        </button>
+                        <button onclick="switchTier('pro')" id="tab-pro" class="px-4 py-2 rounded-md font-medium text-plum-900/60 hover:text-plum-900 transition">
+                            Pro experience
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Side by Side Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Basic Tier Column -->
+                    <div id="col-basic" class="border rounded-xl p-6 border-cream-200 bg-cream-50/50">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] uppercase tracking-wider text-plum-900/50">THE HEARTFELT CLASSIC</span>
+                            <span class="px-2.5 py-0.5 rounded text-[9px] font-semibold tracking-wider uppercase bg-cream-200 text-plum-900">BASIC</span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-normal text-plum-900 mb-2">
+                            All the little things that mean <span class="italic text-terracotta-600">everything.</span>
+                        </h3>
+                        <p class="text-xs text-plum-900/60 mb-6 font-light">
+                            A personal birthday keepsake with all the moments that make them feel celebrated.
+                        </p>
+
+                        <ul class="space-y-3 text-xs text-plum-900/80 mb-8">
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> A heartfelt personal message
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> A sweet 2D birthday cake
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> Memories and achievements from earlier years
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> Best wishes for the future
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> Photos or a small photo gallery
+                            </li>
+                            <li class="flex items-center gap-2 text-plum-900/40">
+                                <span>—</span> Animation, music, and a confetti moment
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Pro Tier Column -->
+                    <div id="col-pro" class="border rounded-xl p-6 border-terracotta-400/40 bg-gradient-to-b from-rose-50/30 to-white relative shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] uppercase tracking-wider text-terracotta-600 font-semibold">THE INTERACTIVE EXPERIENCE</span>
+                            <span class="px-2.5 py-0.5 rounded text-[9px] font-semibold tracking-wider uppercase bg-terracotta-500 text-white">PRO</span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-normal text-plum-900 mb-2">
+                            A birthday story made <span class="italic text-terracotta-600">interactive.</span>
+                        </h3>
+                        <p class="text-xs text-plum-900/60 mb-6 font-light">
+                            A little world to step into—made for the stories, surprises, and people they love.
+                        </p>
+
+                        <ul class="space-y-3 text-xs text-plum-900/90 mb-8">
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> A 'Happy Celebration!' birthday theme
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> Watch the story and blow out candles
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> An interactive 3D-style cake and candle moment
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> A special 'Make a Wish!' celebration
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> Photo memories and milestone story chapters
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-terracotta-500 font-bold">✓</span> Custom music, voice notes, and celebration effects
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: AI Q&A ASSISTANT CONCIERGE -->
+    <section id="assistant" class="py-24 lg:py-32 px-6 lg:px-16 bg-cream-100 text-plum-900">
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-lg mx-auto mb-16">
+                <span class="text-[11px] uppercase tracking-[0.25em] text-terracotta-600 font-semibold block mb-2">— THE WISHCRAFT AI CONCIERGE —</span>
+                <h2 class="font-serif text-5xl lg:text-6xl font-normal text-plum-900 mb-3">
+                    Curious? <br/>
+                    <span class="italic text-terracotta-500">Ask away.</span>
+                </h2>
+                <p class="text-xs text-plum-900/70 font-light">
+                    From the first idea to the perfect little detail, we're here to make it feel easy.
+                </p>
+            </div>
+
+            <!-- Split Layout: Left Simulated Live AI Chat Box | Right FAQ Accordion List -->
+            <div class="bg-white rounded-2xl shadow-2xl border border-cream-300 overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
+                
+                <!-- Left AI Chat Window -->
+                <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-cream-200 bg-cream-50/30">
+                    
+                    <!-- Chat Header -->
+                    <div class="flex items-center justify-between pb-4 border-b border-cream-200">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-plum-900 text-white flex items-center justify-center text-xs">
+                                ✨
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-plum-900">WishCraft Assistant</h4>
+                                <div class="flex items-center gap-1.5 text-[10px] text-emerald-600">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span>Online now</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-[9px] uppercase tracking-widest text-plum-900/40">HERE FOR THE BIG FEELINGS</span>
+                    </div>
+
+                    <!-- Chat Messages Stream -->
+                    <div id="chat-messages" class="py-6 space-y-4 overflow-y-auto max-h-[360px] text-xs">
+                        <div class="text-center text-[10px] text-plum-900/40 uppercase tracking-widest my-2">TODAY • YOUR MOMENT STARTS HERE</div>
+                        
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-plum-900 text-white flex items-center justify-center text-[10px] shrink-0">✨</div>
+                            <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-cream-200 shadow-sm text-plum-900/80 max-w-md leading-relaxed">
+                                Hello, lovely human. Select any question on the right and I'll help you find the right kind of magic.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Bottom Info Note -->
+                    <div class="pt-4 border-t border-cream-200 text-center">
+                        <p class="text-[11px] text-plum-900/50 flex items-center justify-center gap-1.5 font-medium">
+                            <span class="text-terracotta-500">✦</span>
+                            <span>Click any question on the right to start a conversation</span>
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Right Side FAQ Accordion List -->
+                <div class="lg:col-span-5 bg-plum-900 text-white p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-terracotta-400 block mb-2">A FEW THINGS YOU MIGHT WONDER</span>
+                        <h3 class="font-serif text-3xl font-normal mb-6">
+                            Good questions. <br/>
+                            <span class="italic text-terracotta-400">Honest answers.</span>
+                        </h3>
+
+                        <!-- FAQ Clickable Items -->
+                        <div class="space-y-3">
+                            <div onclick="askQuestion('How long does it take to make a card?')" class="p-3 rounded-lg border border-white/10 hover:border-terracotta-400/50 hover:bg-white/5 cursor-pointer transition flex items-center justify-between text-xs">
+                                <span><span class="text-terracotta-400 font-mono mr-2">01</span> How long does it take to make a card?</span>
+                                <span>↗</span>
+                            </div>
+
+                            <div onclick="askQuestion('How is the card delivered?')" class="p-3 rounded-lg border border-white/10 hover:border-terracotta-400/50 hover:bg-white/5 cursor-pointer transition flex items-center justify-between text-xs">
+                                <span><span class="text-terracotta-400 font-mono mr-2">02</span> How is the card delivered?</span>
+                                <span>↗</span>
+                            </div>
+
+                            <div onclick="askQuestion('Are these fully customized?')" class="p-3 rounded-lg border border-white/10 hover:border-terracotta-400/50 hover:bg-white/5 cursor-pointer transition flex items-center justify-between text-xs">
+                                <span><span class="text-terracotta-400 font-mono mr-2">03</span> Are these fully customized?</span>
+                                <span>↗</span>
+                            </div>
+
+                            <div onclick="askQuestion('Do I need an app to open it?')" class="p-3 rounded-lg border border-white/10 hover:border-terracotta-400/50 hover:bg-white/5 cursor-pointer transition flex items-center justify-between text-xs">
+                                <span><span class="text-terracotta-400 font-mono mr-2">04</span> Do I need an app to open it?</span>
+                                <span>↗</span>
+                            </div>
+
+                            <div onclick="askQuestion('How do I pay for my card?')" class="p-3 rounded-lg border border-white/10 hover:border-terracotta-400/50 hover:bg-white/5 cursor-pointer transition flex items-center justify-between text-xs">
+                                <span><span class="text-terracotta-400 font-mono mr-2">05</span> How do I pay for my card?</span>
+                                <span>↗</span>
+                            </div>
+
+                            <div onclick="askQuestion('Can I add music & voice notes?')" class="p-3 rounded-lg border border-white/10 hover:border-terracotta-400/50 hover:bg-white/5 cursor-pointer transition flex items-center justify-between text-xs">
+                                <span><span class="text-terracotta-400 font-mono mr-2">06</span> Can I add music & voice notes?</span>
+                                <span>↗</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 text-[10px] text-white/40 flex items-center gap-2 mt-4">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span>Always here, whatever time zone you're in.</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 8: CONTACT & FOOTER SECTION -->
+    <footer id="contact" class="bg-plum-900 text-white py-24 lg:py-32 px-6 lg:px-16 border-t border-white/10 relative overflow-hidden">
+        
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
+            
+            <!-- Left Info Column -->
+            <div class="lg:col-span-6 flex flex-col justify-between h-full space-y-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-[1px] bg-terracotta-400"></span>
+                        <span class="text-[11px] uppercase tracking-[0.25em] text-terracotta-400 font-semibold">LET'S MAKE SOMEONE'S DAY</span>
+                    </div>
+
+                    <h2 class="font-serif text-5xl lg:text-6xl font-normal leading-tight mb-6">
+                        Tell us what <br/>
+                        you're <span class="italic text-terracotta-400 font-serif">celebrating.</span>
+                    </h2>
+
+                    <p class="text-sm text-white/70 font-light leading-relaxed max-w-md mb-8">
+                        A name, a date, a memory they love—we'll shape it into a little world of their own.
+                    </p>
+
+                    <!-- WhatsApp Button Connected to Number -->
+                    <a href="https://wa.me/94787069188" target="_blank" class="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 border border-white/15 px-6 py-4 rounded-xl transition duration-300 group">
+                        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">
+                            W
+                        </div>
+                        <div>
+                            <div class="text-xs font-semibold text-white group-hover:text-terracotta-400 transition">Order on WhatsApp</div>
+                            <div class="text-[10px] text-white/50">Tell us the moment. We'll make it magic.</div>
+                        </div>
+                        <span class="text-xs text-white/60 ml-2 group-hover:translate-x-1 transition-transform">↗</span>
+                    </a>
+                </div>
+
+                <!-- Social Links Connected -->
+                <div class="pt-8 border-t border-white/10">
+                    <span class="text-[10px] uppercase tracking-widest text-white/40 block mb-3">FOLLOW ALONG FOR A LITTLE MAGIC</span>
+                    <div class="flex gap-3">
+                        <!-- Instagram Link -->
+                        <a href="https://www.instagram.com/nurajkavishka?srtk=MTduOTFlaHI3dHkyZQ==" target="_blank" aria-label="Instagram" class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-white hover:text-plum-900 transition">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <!-- TikTok Link -->
+                        <a href="https://www.tiktok.com/@wish.cards4?_r=1&_t=ZS-9AiYr2sS99s" target="_blank" aria-label="TikTok" class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-white hover:text-plum-900 transition">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .56.04.83.1v-3.5a6.34 6.34 0 0 0-.83-.05A6.33 6.33 0 0 0 3 15.65 6.34 6.34 0 0 0 9.35 22a6.33 6.33 0 0 0 6.33-6.33V9.16a8.16 8.16 0 0 0 4.91 1.62v-3.5a4.85 4.85 0 0 1-1-.59z"/>
+                            </svg>
+                        </a>
+                        <!-- Facebook Link -->
+                        <a href="https://www.facebook.com/profile.php?id=61594868232939" target="_blank" aria-label="Facebook" class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-white hover:text-plum-900 transition">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Form Box Column with Web3Forms Integration -->
+            <div class="lg:col-span-6 bg-cream-50 text-plum-900 p-8 sm:p-10 rounded-2xl shadow-2xl border border-cream-200">
+                <div class="flex items-center justify-between mb-6 border-b border-cream-200 pb-4">
+                    <span class="text-[10px] font-mono text-plum-900/40 uppercase">01 — YOUR LITTLE BRIEF</span>
+                    <span class="text-xs text-terracotta-500">✦</span>
+                </div>
+
+                <h3 class="font-serif text-3xl font-normal mb-1">Start with a <span class="italic text-terracotta-600">hello.</span></h3>
+                <p class="text-xs text-plum-900/60 font-light mb-6">Share a few details and we'll take it from there.</p>
+
+                <form action="https://api.web3forms.com/submit" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <!-- Web3Forms Access Key -->
+                    <input type="hidden" name="access_key" value="678e9c08-3fd3-47bc-a791-034e59d37851">
+                    <input type="hidden" name="subject" value="New WishCraft Celebration Inquiry">
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-plum-900/70 font-semibold mb-1">Your name</label>
+                        <input type="text" name="name" required placeholder="The name we should know you by" class="w-full bg-white border border-cream-300 rounded-lg px-4 py-2.5 text-xs text-plum-900 focus:outline-none focus:border-terracotta-500 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-plum-900/70 font-semibold mb-1">What are we celebrating?</label>
+                        <select name="celebration" class="w-full bg-white border border-cream-300 rounded-lg px-4 py-2.5 text-xs text-plum-900 focus:outline-none focus:border-terracotta-500 transition">
+                            <option>Birthday</option>
+                            <option>Anniversary</option>
+                            <option>Wedding</option>
+                            <option>Mother's Day</option>
+                            <option>Graduation</option>
+                            <option>Just because</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-plum-900/70 font-semibold mb-1">The little details</label>
+                        <textarea name="message" rows="3" placeholder="A date, a favorite song, a secret message... anything that makes it personal." class="w-full bg-white border border-cream-300 rounded-lg px-4 py-2.5 text-xs text-plum-900 focus:outline-none focus:border-terracotta-500 transition resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full bg-terracotta-500 hover:bg-terracotta-600 text-white font-medium text-xs uppercase tracking-widest py-3.5 rounded-lg transition duration-300 shadow-md flex items-center justify-center gap-2">
+                        <span>Send inquiry request</span>
+                        <span>↗</span>
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <span class="text-[9px] text-plum-900/40">🔒 Your details stay between us and the card.</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Copyright Bar -->
+        <div class="max-w-6xl mx-auto pt-16 mt-16 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-[11px] text-white/40 gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-serif text-white font-bold">WishCraft.</span>
+                <span>Digital wishes. Made to last.</span>
+            </div>
+
+            <div>
+                © 2026 WishCraft • Crafted with care
+            </div>
+
+            <div>
+                <a href="#hero" class="hover:text-white transition uppercase tracking-wider font-mono">BACK TO TOP ↑</a>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT CODE -->
+    <script>
+        // 1. Toggle Hero Candle Flame Demo
+        function toggleDemoFlame() {
+            const flame = document.getElementById('demo-flame');
+            if (flame.style.opacity === '0') {
+                flame.style.opacity = '1';
+            } else {
+                flame.style.opacity = '0';
+            }
+        }
+
+        // 2. Blow out candle feature 1
+        function blowCandleCard() {
+            const flame = document.getElementById('candle-flame-card');
+            flame.style.opacity = flame.style.opacity === '0' ? '1' : '0';
+        }
+
+        // 3. Scratch Canvas Setup for Feature 2
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('scratch-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function initCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                
+                // Draw silvery pink foil cover
+                ctx.fillStyle = '#e8d5cf';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.font = '10px sans-serif';
+                ctx.fillStyle = '#9c7b73';
+                ctx.textAlign = 'center';
+                ctx.fillText('Scratch to reveal', canvas.width / 2, canvas.height / 2);
+            }
+
+            initCanvas();
+
+            let isScratching = false;
+
+            function scratch(e) {
+                if (!isScratching) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 16, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            canvas.addEventListener('mousedown', () => isScratching = true);
+            canvas.addEventListener('mouseup', () => isScratching = false);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('touchstart', () => isScratching = true);
+            canvas.addEventListener('touchend', () => isScratching = false);
+            canvas.addEventListener('touchmove', scratch);
+        });
+
+        // 4. Voice Note Audio Player Simulation
+        let isPlayingVoice = false;
+        function toggleVoiceNote() {
+            const btn = document.getElementById('play-voice-btn');
+            const timer = document.getElementById('voice-timer');
+            isPlayingVoice = !isPlayingVoice;
+            btn.innerHTML = isPlayingVoice ? '⏸' : '▶';
+            
+            if (isPlayingVoice) {
+                let sec = 8;
+                const interval = setInterval(() => {
+                    if (!isPlayingVoice || sec <= 0) {
+                        clearInterval(interval);
+                        isPlayingVoice = false;
+                        btn.innerHTML = '▶';
+                        timer.innerText = '00:08';
+                        return;
+                    }
+                    sec--;
+                    timer.innerText = `00:0${sec}`;
+                }, 1000);
+            }
+        }
+
+        // 5. Confetti FX
+        function triggerConfettiFX() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.7 }
+                });
+            }
+        }
+
+        // 6. Tier Comparison Switcher
+        function switchTier(tier) {
+            const btnBasic = document.getElementById('tab-basic');
+            const btnPro = document.getElementById('tab-pro');
+            const colBasic = document.getElementById('col-basic');
+            const colPro = document.getElementById('col-pro');
+
+            if (tier === 'basic') {
+                btnBasic.className = 'px-4 py-2 rounded-md font-medium text-plum-900 bg-white shadow-sm transition';
+                btnPro.className = 'px-4 py-2 rounded-md font-medium text-plum-900/60 hover:text-plum-900 transition';
+                colBasic.classList.add('ring-2', 'ring-terracotta-400');
+                colPro.classList.remove('ring-2', 'ring-terracotta-400');
+            } else {
+                btnPro.className = 'px-4 py-2 rounded-md font-medium text-plum-900 bg-white shadow-sm transition';
+                btnBasic.className = 'px-4 py-2 rounded-md font-medium text-plum-900/60 hover:text-plum-900 transition';
+                colPro.classList.add('ring-2', 'ring-terracotta-400');
+                colBasic.classList.remove('ring-2', 'ring-terracotta-400');
+            }
+        }
+
+        // 7. Interactive AI Assistant Chat Logic
+        const faqAnswers = {
+            'How long does it take to make a card?': 'Our standard digital cards arrive within 24 hours! For custom midnight deliveries, we recommend placing your order at least 2 days prior to your desired date.',
+            'How is the card delivered?': 'We send a private magic link via SMS, Email, or WhatsApp directly to the recipient at midnight (or your preferred scheduled time).',
+            'Are these fully customized?': 'Yes! Every WishCraft card is built around your photos, voice notes, personal messages, favorite colors, and chosen celebration theme.',
+            'Do I need an app to open it?': 'Not at all! The digital card opens instantly in any web browser on smartphones, tablets, or desktop computers.',
+            'How do I pay for my card?': 'We support all major credit cards, Apple Pay, Google Pay, and PayPal with encrypted checkout.',
+            'Can I add music & voice notes?': 'Absolutely. You can upload custom audio files or record voice notes directly in our builder.'
+        };
+
+        function askQuestion(qText) {
+            const messagesContainer = document.getElementById('chat-messages');
+            
+            // Append User Question Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex items-start justify-end gap-3';
+            userMsg.innerHTML = `
+                <div class="bg-plum-900 text-white p-3 rounded-2xl rounded-tr-none text-xs max-w-xs leading-relaxed">
+                    ${qText}
+                </div>
+            `;
+            messagesContainer.appendChild(userMsg);
+
+            // Simulate AI Thinking
+            setTimeout(() => {
+                const answer = faqAnswers[qText] || "Thank you for asking! Our team will customize every single detail of your wish to perfection.";
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'flex items-start gap-3';
+                aiMsg.innerHTML = `
+                    <div class="w-6 h-6 rounded-full bg-plum-900 text-white flex items-center justify-center text-[10px] shrink-0">✨</div>
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-cream-200 shadow-sm text-plum-900/80 max-w-xs leading-relaxed">
+                        ${answer}
+                    </div>
+                `;
+                messagesContainer.appendChild(aiMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // 8. Contact Form Submission via Web3Forms API
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.innerText = 'Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('✨ Thank you! Your wish request has been received. Our team will get in touch shortly!');
+                    form.reset();
+                } else {
+                    alert('Oops! There was an issue submitting your request. Please try again or reach out on WhatsApp.');
+                }
+            } catch (error) {
+                alert('✨ Thank you! Your request has been recorded.');
+                form.reset();
+            } finally {
+                submitBtn.innerText = 'Send inquiry request ↗';
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
